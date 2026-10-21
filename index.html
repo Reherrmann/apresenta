@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gerador de Apresentações | PLURI</title>
+<link rel="icon" href="PLURI-azul.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#002C47;--yellow:#FFBE46;--bg:#F7F9FB;--text:#0B2537;--muted:#667085;--line:#D9E0E6;--green:#059669;--red:#DC2626;--cream:#F9F5E8;--sage:#7B9170}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:14px}
+header{background:var(--navy);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header b{font-size:18px;font-weight:800}header span{opacity:.75;font-size:13px}
+.badge{margin-left:auto;background:var(--yellow);color:var(--navy);font-weight:700;font-size:12px;padding:4px 10px;border-radius:99px}
+.page{max-width:1360px;margin:0 auto;padding:20px 24px}
+@media(max-width:960px){.page{padding:16px}}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+h2{margin:0 0 10px;font-size:15px;color:var(--navy)}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:22px;text-align:center;background:#fbfcfd}
+.drop.over{border-color:var(--navy);background:#f0f5f9}
+.drop p{margin:0 0 12px;color:var(--muted)}
+.btn{border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.p{background:var(--yellow);color:var(--navy)}.btn.s{background:#fff;border:1px solid var(--line);color:var(--navy)}
+.btn:disabled{opacity:.5;cursor:default}
+.links{margin-top:12px;font-size:12.5px;color:var(--muted)}.links a{color:var(--navy);font-weight:600}
+.err{margin-top:12px;color:var(--red);font-size:13px;font-weight:600}
+.ok{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:12px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
+.hide{display:none!important}
+.tabs{display:flex;gap:6px;margin:16px 0}
+.tab{padding:8px 14px;border-radius:99px;border:1px solid var(--line);background:#fff;cursor:pointer;font:inherit;font-weight:600;color:var(--muted)}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:960px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font-size:24px;color:var(--navy)}.kpi span{font-size:12px;color:var(--muted)}
+.charts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:1100px){.charts{grid-template-columns:1fr 1fr}}@media(max-width:700px){.charts{grid-template-columns:1fr}}
+.ch{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.ch h3{margin:0 0 8px;font-size:13px;color:var(--navy)}
+.ch .box{position:relative;height:240px}
+.scope{display:flex;gap:14px;align-items:center;margin-bottom:12px;font-size:13px}
+.scope label{display:flex;gap:6px;align-items:center}
+.wrap{display:grid;grid-template-columns:360px 1fr;gap:20px}
+@media(max-width:960px){.wrap{grid-template-columns:1fr}}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+label.f{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:10px 0 4px}
+select,input[type=text],textarea{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+textarea{min-height:90px;resize:vertical}
+input[type=color]{width:100%;height:36px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.mini{display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap}
+.mini button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer;color:var(--navy);font-weight:600}
+#lista{max-height:300px;overflow:auto;padding-right:4px}
+.proj{display:flex;gap:9px;align-items:flex-start;padding:9px;border:1px solid var(--line);border-radius:10px;margin-top:7px;cursor:pointer;border-left-width:5px}
+.proj.on{background:#f0f5f9;border-color:var(--navy)}
+.proj input{margin-top:3px;accent-color:var(--navy)}
+.proj b{display:block;font-size:12.5px;line-height:1.3}.proj small{color:var(--muted);font-size:11.5px}
+.toggles label{display:flex;gap:8px;align-items:center;margin:6px 0;font-size:13.5px}.toggles input{accent-color:var(--navy)}
+.stage{background:#e9eef2;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.nav{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12.5px}
+.nav button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;font:inherit}
+.actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.msg{font-size:13px;font-weight:600;color:var(--muted)}
+/* slides */
+.slide{container-type:inline-size;width:100%;max-width:760px;aspect-ratio:16/9;background:var(--cream);border-radius:6px;box-shadow:0 6px 24px rgba(0,44,71,.15);position:relative;overflow:hidden;font-family:Montserrat,Inter,sans-serif;color:#1d2433}
+.in{position:absolute;inset:0;padding:5.5cqw 6cqw 4cqw;display:flex;flex-direction:column}
+.s-cover{background:var(--c1);color:#fff}.s-cover .in{justify-content:center}
+.k{font-size:2cqw;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:1.6cqw;font-weight:600}
+.k.g{color:var(--sage);opacity:1}
+.t1{font-size:6cqw;line-height:1.1;margin:0;font-weight:600}.t1b{font-size:3.2cqw;margin:2cqw 0 0;font-weight:500;opacity:.9}
+.t2{font-size:3.1cqw;line-height:1.2;margin:0 0 1.2cqw;color:var(--c2);font-weight:600}
+.chip{display:inline-block;font-size:1.55cqw;font-weight:600;color:#fff;border-radius:99px;padding:.5cqw 1.6cqw;margin-bottom:1.5cqw;align-self:flex-start}
+.sub{font-size:1.75cqw;color:#5c6378;margin-bottom:1.8cqw}
+.txt{font-size:1.95cqw;line-height:1.5;color:#2b3142;margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw;margin-top:auto}
+.kp{background:#fff;border:1px solid #e8e2d0;border-radius:1cqw;padding:1.2cqw 1.5cqw}
+.kp b{display:block;font-size:2.5cqw;color:var(--c1);line-height:1.15}.kp span{font-size:1.4cqw;color:#6b7186}
+.meta{font-size:1.6cqw;color:#4a5064;line-height:1.5;margin-top:1.4cqw}.meta b{color:var(--c2)}
+.pt{font-size:1.5cqw;color:#8a8f9f;margin-top:auto;text-align:right}
+.pp{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw 2.4cqw;font-size:1.65cqw;line-height:1.35}
+.pp span{display:block;border-bottom:1px solid #e4dec9;padding-bottom:.8cqw}
+.pers{display:grid;grid-template-columns:1fr 1fr;gap:1.4cqw}
+.pers div{background:#fff;border-radius:1cqw;padding:1.2cqw 1.5cqw;border:1px solid #e8e2d0}
+.pers b{font-size:1.9cqw;color:var(--c1)}.pers small{display:block;font-size:1.35cqw;color:#6b7186;margin-top:.3cqw;line-height:1.35}
+.it{font-size:1.7cqw;line-height:1.35;margin-bottom:1.3cqw}
+.it small{color:var(--sage);font-weight:700;text-transform:uppercase;font-size:1.3cqw;display:block}.it i{color:#6b7186;font-size:1.45cqw;font-style:normal}
+.hb{display:grid;grid-template-columns:34% 1fr 5%;gap:.8cqw 1cqw;align-items:center;font-size:1.45cqw;margin-bottom:.4cqw}
+.hb i{display:block;height:1.5cqw;border-radius:.4cqw}
+.two{display:grid;grid-template-columns:1.25fr 1fr;gap:3cqw;flex:1}
+.pie{display:flex;flex-direction:column;gap:.9cqw;font-size:1.5cqw}
+.pie span{display:flex;align-items:center;gap:.8cqw}.pie i{width:1.4cqw;height:1.4cqw;border-radius:.3cqw;flex:none}
+#printArea{display:none}
+@media print{
+  @page{size:13.333in 7.5in;margin:0}
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block}
+  #printArea .slide{width:13.333in;max-width:none;height:7.5in;aspect-ratio:auto;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header><b>PLURI</b><span>Gerador de Apresentações · protótipo funcional</span><span class="badge">Protótipo</span></header>
+<div class="page">
+
+<section class="card" id="sData">
+  <h2>1. Dados</h2>
+  <div id="loaded" class="ok hide"><span class="dot"></span><span id="loadedTxt"></span><button class="btn s" id="trocar" style="margin-left:auto;padding:6px 12px">Trocar arquivo</button></div>
+  <div id="dropWrap">
+    <div class="drop" id="drop">
+      <p>Arraste aqui a planilha Excel (.xlsx) com os projetos, ou escolha o arquivo.</p>
+      <button class="btn p" id="pick">Escolher planilha</button>
+      <button class="btn s" id="demo">Usar dados de exemplo</button>
+      <input type="file" id="file" accept=".xlsx,.xls" class="hide">
+    </div>
+    <div class="links">Primeira vez? <a href="base-ficticia-instituto-alvorada-2025.xlsx" download>Baixar planilha-modelo</a> (abas: Projetos, Projeto_Equipe, Frentes, Parceiros, Equipe, Producao_Eventos). Os dados são lidos só no seu navegador, nada é enviado para servidor.</div>
+    <div class="err hide" id="err"></div>
+  </div>
+</section>
+
+<div id="app" class="hide">
+  <div class="tabs"><button class="tab on" data-t="painel">Painel</button><button class="tab" data-t="apres">Montar apresentação</button></div>
+
+  <section id="painel">
+    <div class="scope"><b>Mostrar:</b><label><input type="radio" name="scope" value="todos" checked> todos os projetos</label><label><input type="radio" name="scope" value="sel"> só os selecionados para a apresentação</label></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="charts" id="charts"></div>
+  </section>
+
+  <section id="apres" class="hide">
+  <div class="wrap">
+    <aside class="card">
+      <h2>Projetos</h2>
+      <div class="row2">
+        <div><label class="f">Frente temática</label><select id="fFrente"></select></div>
+        <div><label class="f">Abordagem</label><select id="fAbo"></select></div>
+        <div><label class="f">Status</label><select id="fStatus"></select></div>
+        <div><label class="f">Tipo de parceiro</label><select id="fTipo"></select></div>
+      </div>
+      <label class="f">Buscar</label><input type="text" id="fBusca" placeholder="Projeto, parceiro ou pessoa">
+      <div class="mini"><button id="bDest">Só destaques</button><button id="bTodos">Marcar visíveis</button><button id="bLimpa">Limpar</button></div>
+      <div id="lista"></div>
+      <h2 style="margin-top:16px">Seções</h2>
+      <div class="toggles">
+        <label><input type="checkbox" id="tCapa" checked> Capa</label>
+        <label><input type="checkbox" id="tApres" checked> Quem somos</label>
+        <label><input type="checkbox" id="tNum" checked> Números</label>
+        <label><input type="checkbox" id="tPan" checked> Panorama (gráficos)</label>
+        <label><input type="checkbox" id="tPar" checked> Parceiros</label>
+        <label><input type="checkbox" id="tProj" checked> Um slide por projeto</label>
+        <label><input type="checkbox" id="tProd" checked> Artigos, eventos e mídia</label>
+        <label><input type="checkbox" id="tEq" checked> Equipe</label>
+        <label><input type="checkbox" id="tFim" checked> Encerramento</label>
+      </div>
+      <h2 style="margin-top:16px">Identidade</h2>
+      <label class="f">Nome da instituição</label><input type="text" id="org" value="Instituto Alvorada">
+      <label class="f">Título da capa</label><input type="text" id="titulo" value="Pesquisas aplicadas para políticas públicas">
+      <label class="f">Texto “Quem somos”</label><textarea id="about">Produz estudos aplicados para apoiar decisões de governos, empresas e organizações da sociedade civil, com atenção a gênero, raça, idade e território. Combina métodos quantitativos e qualitativos e desenha cada projeto sob medida.</textarea>
+      <div class="row2"><div><label class="f">Cor principal</label><input type="color" id="c1" value="#754E55"></div><div><label class="f">Cor de apoio</label><input type="color" id="c2" value="#3F4468"></div></div>
+    </aside>
+    <main>
+      <div class="card">
+        <div class="stage"><div class="slide" id="slide"></div><div class="nav"><button id="ant">←</button><span id="pos"></span><button id="prox">→</button></div></div>
+        <div class="actions">
+          <button class="btn p" id="gPptx">Baixar PowerPoint (.pptx)</button>
+          <button class="btn s" id="gPdf">Salvar como PDF</button>
+          <span class="msg" id="msg"></span>
+        </div>
+        <div class="links">O PowerPoint abre também no Google Apresentações (Arquivo → Importar slides). Os gráficos do panorama são editáveis.</div>
+      </div>
+    </main>
+  </div>
+  </section>
+</div>
+</div>
+<div id="printArea"></div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/pptxgen.bundle.js"></script>
+<script src="vendor/chart.umd.js"></script>
+<script>
+const DEMO={"frentes": [{"nome": "Saúde e bem-estar", "cor": "#754E55"}, {"nome": "Trabalho e renda", "cor": "#A998B4"}, {"nome": "Educação", "cor": "#8C8F7A"}, {"nome": "Clima e meio ambiente", "cor": "#8F98B3"}, {"nome": "Cultura e comunicação", "cor": "#B8808E"}, {"nome": "Habitação e território", "cor": "#7F9692"}, {"nome": "Gestão pública e dados", "cor": "#8FA3A0"}], "projetos": [{"id": "P01", "frente": "Saúde e bem-estar", "titulo": "Acesso a consultas especializadas na rede básica", "parceiro": "Fundação Horizonte Social", "outros": "", "coordenacao": ["Helena Marques"], "equipe": ["Mateus Albuquerque", "Camile Brandão"], "abordagem": "Qualitativa", "metodologia": "Entrevistas com usuários, médicos e gestores de unidades", "territorio": "Campinas (SP) e Juiz de Fora (MG)", "ini": 2025, "fim": 2025, "status": "Concluído", "entrevistas": 36, "grupos": null, "produto": "Relatório técnico com mapa dos gargalos de encaminhamento", "resumo": "Descreve onde o acesso a especialistas trava na rede básica e que arranjos locais funcionam melhor.", "destaque": "Não"}, {"id": "P02", "frente": "Saúde e bem-estar", "titulo": "Satisfação de usuários com o atendimento em unidades de saúde", "parceiro": "Prefeitura de Rio Claro do Sul (Secretaria de Saúde)", "outros": "", "coordenacao": ["Helena Marques"], "equipe": ["Gustavo Lacerda", "Mateus Albuquerque"], "abordagem": "Quantitativa", "metodologia": "Survey presencial com 3.000 usuários em 42 unidades", "territorio": "Rio Claro do Sul", "ini": 2025, "fim": 2025, "status": "Concluído", "entrevistas": null, "grupos": null, "produto": "Painel de satisfação por unidade e relatório de recomendações", "resumo": "Mede a satisfação com tempo de espera, acolhimento e resolutividade e compara as unidades.", "destaque": "Sim"}, {"id": "P03", "frente": "Saúde e bem-estar", "titulo": "Saúde mental de profissionais de enfermagem", "parceiro": "Hospital Universitário Santa Aurora", "outros": "", "coordenacao": ["Beatriz Nogueira", "Helena Marques"], "equipe": ["Camile Brandão", "Tiago Valente"], "abordagem": "Mista", "metodologia": "Questionário com 800 profissionais e entrevistas de aprofundamento", "territorio": "São Paulo", "ini": 2024, "fim": 2025, "status": "Concluído", "entrevistas": 24, "grupos": null, "produto": "Relatório final e guia de boas práticas para gestores", "resumo": "Identifica fatores de desgaste e de proteção da saúde mental de equipes de enfermagem.", "destaque": "Não"}, {"id": "P04", "frente": "Trabalho e renda", "titulo": "Renda e endividamento de microempreendedores", "parceiro": "Banco Meridional", "outros": "", "coordenacao": ["Beatriz Nogueira"], "equipe": ["Gustavo Lacerda", "Isadora Pimentel"], "abordagem": "Mista", "metodologia": "Survey com 2.000 microempreendedores e entrevistas em profundidade", "territorio": "Capitais do Sul e do Sudeste", "ini": 2025, "fim": 2025, "status": "Concluído", "entrevistas": 28, "grupos": null, "produto": "Relatório com perfil de renda e dívida e recomendações de produto", "resumo": "Mostra como a renda varia ao longo do ano e como o crédito é usado para capital de giro.", "destaque": "Sim"}, {"id": "P05", "frente": "Trabalho e renda", "titulo": "Qualificação profissional e inserção no setor de serviços", "parceiro": "Instituto Semear", "outros": "", "coordenacao": ["Rodrigo Tavares"], "equipe": ["Renata Siqueira", "Gustavo Lacerda"], "abordagem": "Quantitativa", "metodologia": "Acompanhamento de 1.500 egressos de cursos em três momentos", "territorio": "Região Sul", "ini": 2024, "fim": 2026, "status": "Em andamento", "entrevistas": null, "grupos": null, "produto": "Relatórios de acompanhamento por onda", "resumo": "Acompanha egressos de cursos curtos para medir inserção, renda e permanência no emprego.", "destaque": "Não"}, {"id": "P06", "frente": "Trabalho e renda", "titulo": "Cooperativas de reciclagem e geração de renda", "parceiro": "Instituto Cidades em Rede", "outros": "", "coordenacao": ["Rodrigo Tavares"], "equipe": ["Larissa Duarte", "Patrícia Moura"], "abordagem": "Qualitativa", "metodologia": "Estudo de caso em 8 cooperativas, com observação e entrevistas", "territorio": "Sul e Sudeste", "ini": 2025, "fim": null, "status": "Em andamento", "entrevistas": 32, "grupos": null, "produto": "Estudos de caso e cartilha para novas cooperativas", "resumo": "Descreve modelos de gestão e de divisão de renda que sustentam cooperativas de catadores.", "destaque": "Não"}, {"id": "P07", "frente": "Educação", "titulo": "Alfabetização na idade certa em redes municipais", "parceiro": "Fundação Vale Verde", "outros": "", "coordenacao": ["Beatriz Nogueira", "Rodrigo Tavares"], "equipe": ["Larissa Duarte", "Renata Siqueira", "Patrícia Moura"], "abordagem": "Mista", "metodologia": "Avaliação de leitura de 6.000 alunos e entrevistas com professores", "territorio": "Brasil", "ini": 2023, "fim": 2025, "status": "Concluído", "entrevistas": 40, "grupos": null, "produto": "Relatório final com práticas associadas a melhores resultados", "resumo": "Identifica práticas de ensino e de gestão associadas a melhores resultados de alfabetização.", "destaque": "Não"}, {"id": "P08", "frente": "Educação", "titulo": "Formação continuada de professores do ensino fundamental", "parceiro": "Secretaria Estadual de Educação", "outros": "", "coordenacao": ["Beatriz Nogueira"], "equipe": ["Camile Brandão", "Eduardo Rangel"], "abordagem": "Qualitativa", "metodologia": "Observação de formações, entrevistas e grupos focais com docentes", "territorio": "Interior do estado", "ini": 2025, "fim": null, "status": "Em andamento", "entrevistas": 22, "grupos": 5, "produto": "Diagnóstico e proposta de desenho de formação", "resumo": "Entende como a formação continuada chega à sala de aula e o que muda na prática docente.", "destaque": "Não"}, {"id": "P09", "frente": "Educação", "titulo": "Bibliotecas escolares e hábitos de leitura", "parceiro": "Instituto Semear", "outros": "", "coordenacao": ["Helena Marques"], "equipe": ["Isadora Pimentel", "Gustavo Lacerda"], "abordagem": "Mista", "metodologia": "Survey com 2.500 estudantes e visitas a 30 bibliotecas", "territorio": "Região Sudeste", "ini": 2025, "fim": 2025, "status": "Concluído", "entrevistas": null, "grupos": 6, "produto": "Relatório e guia de uso do acervo", "resumo": "Relaciona estrutura e uso das bibliotecas escolares com o hábito de leitura dos estudantes.", "destaque": "Não"}, {"id": "P10", "frente": "Clima e meio ambiente", "titulo": "Percepção de risco de enchentes em bairros periféricos", "parceiro": "Prefeitura de Rio Claro do Sul (Defesa Civil)", "outros": "", "coordenacao": ["Rodrigo Tavares"], "equipe": ["Larissa Duarte", "Camile Brandão", "Eduardo Rangel"], "abordagem": "Mista", "metodologia": "Survey domiciliar, mapeamento participativo e entrevistas", "territorio": "Rio Claro do Sul", "ini": 2024, "fim": 2025, "status": "Concluído", "entrevistas": 35, "grupos": 6, "produto": "Mapa de risco percebido e plano de comunicação com moradores", "resumo": "Cruza o risco medido com o risco percebido por moradores e propõe formas de alerta mais eficazes.", "destaque": "Sim"}, {"id": "P11", "frente": "Clima e meio ambiente", "titulo": "Adaptação climática em pequenas propriedades rurais", "parceiro": "Cooperativa AgroNorte", "outros": "", "coordenacao": ["Rodrigo Tavares"], "equipe": ["Larissa Duarte", "Helena Marques"], "abordagem": "Qualitativa", "metodologia": "Entrevistas em profundidade e oficinas com famílias produtoras", "territorio": "Bacia do Rio Negro", "ini": 2025, "fim": null, "status": "Em andamento", "entrevistas": 45, "grupos": null, "produto": "Relatório de práticas de adaptação e oficinas de devolução", "resumo": "Registra como famílias produtoras já se adaptam a secas e cheias e que apoios faltam.", "destaque": "Não"}, {"id": "P12", "frente": "Clima e meio ambiente", "titulo": "Inventário de emissões em municípios de pequeno porte", "parceiro": "Instituto Cidades em Rede", "outros": "", "coordenacao": ["Caio Ferraz"], "equipe": ["Eduardo Rangel", "Gustavo Lacerda"], "abordagem": "Dados secundários", "metodologia": "Cálculo de emissões a partir de bases oficiais e dados municipais", "territorio": "Municípios de pequeno porte", "ini": null, "fim": 2025, "status": "Recorrente", "entrevistas": null, "grupos": null, "produto": "Inventários anuais por município e metodologia aberta", "resumo": "Estima emissões de municípios sem equipe técnica própria e apoia metas locais de redução.", "destaque": "Não"}, {"id": "P13", "frente": "Cultura e comunicação", "titulo": "Hábitos culturais e acesso a equipamentos públicos", "parceiro": "Secretaria Estadual de Cultura", "outros": "", "coordenacao": ["Beatriz Nogueira", "Rodrigo Tavares"], "equipe": ["Isadora Pimentel", "Gustavo Lacerda"], "abordagem": "Quantitativa", "metodologia": "Survey com 4.000 moradores e georreferenciamento de equipamentos", "territorio": "Estado de São Paulo", "ini": 2025, "fim": 2025, "status": "Concluído", "entrevistas": null, "grupos": null, "produto": "Relatório e base de dados anonimizada", "resumo": "Mostra quem frequenta equipamentos culturais públicos e como a distância pesa no acesso.", "destaque": "Não"}, {"id": "P14", "frente": "Cultura e comunicação", "titulo": "Rádios comunitárias e informação local", "parceiro": "Centro de Estudos da Sociedade Digital (CESD)", "outros": "", "coordenacao": ["Helena Marques"], "equipe": ["Renata Siqueira", "Larissa Duarte"], "abordagem": "Qualitativa", "metodologia": "Entrevistas com radialistas e grupos focais com ouvintes", "territorio": "Norte e Nordeste", "ini": 2025, "fim": null, "status": "Em andamento", "entrevistas": 26, "grupos": 6, "produto": "Relatório e série de episódios de divulgação", "resumo": "Investiga o papel das rádios comunitárias no acesso à informação em cidades pequenas.", "destaque": "Não"}, {"id": "P15", "frente": "Habitação e território", "titulo": "Condições de moradia em ocupações urbanas", "parceiro": "Prefeitura de Rio Claro do Sul (Secretaria de Habitação)", "outros": "Agência Municipal de Fomento (AMF)", "coordenacao": ["Caio Ferraz", "Rodrigo Tavares"], "equipe": ["Larissa Duarte", "Eduardo Rangel", "Camile Brandão"], "abordagem": "Mista", "metodologia": "Censo de domicílios em 12 ocupações e entrevistas com moradores", "territorio": "Rio Claro do Sul", "ini": 2025, "fim": null, "status": "Em andamento", "entrevistas": 30, "grupos": null, "produto": "Cadastro de domicílios e relatório de prioridades de urbanização", "resumo": "Levanta infraestrutura, riscos e demandas de moradia em ocupações para orientar investimentos.", "destaque": "Sim"}, {"id": "P16", "frente": "Habitação e território", "titulo": "Deslocamento casa-trabalho em regiões metropolitanas", "parceiro": "Associação Nacional de Mobilidade Ativa (ANMA)", "outros": "", "coordenacao": ["Rodrigo Tavares"], "equipe": ["Gustavo Lacerda", "Eduardo Rangel"], "abordagem": "Quantitativa", "metodologia": "Análise de pesquisa origem-destino e dados de bilhetagem", "territorio": "Três regiões metropolitanas", "ini": 2025, "fim": 2025, "status": "Concluído", "entrevistas": null, "grupos": null, "produto": "Relatório com tempos de viagem por faixa de renda", "resumo": "Compara tempo e custo do deslocamento ao trabalho entre faixas de renda e regiões.", "destaque": "Não"}, {"id": "P17", "frente": "Habitação e território", "titulo": "Mapa de vulnerabilidade social por setor censitário", "parceiro": "Agência Municipal de Fomento (AMF)", "outros": "", "coordenacao": ["Caio Ferraz"], "equipe": ["Eduardo Rangel", "Patrícia Moura"], "abordagem": "Dados secundários", "metodologia": "Índice composto a partir de dados do censo e de cadastros públicos", "territorio": "Rio Claro do Sul", "ini": 2025, "fim": 2025, "status": "Concluído", "entrevistas": null, "grupos": null, "produto": "Índice por setor e mapa interativo", "resumo": "Combina renda, infraestrutura e escolaridade em um índice de vulnerabilidade por setor.", "destaque": "Não"}, {"id": "P18", "frente": "Gestão pública e dados", "titulo": "Painel de transparência de contratos municipais", "parceiro": "Prefeitura de Rio Claro do Sul (Controladoria)", "outros": "", "coordenacao": ["Caio Ferraz"], "equipe": ["Patrícia Moura", "Eduardo Rangel"], "abordagem": "Dados secundários", "metodologia": "Padronização de bases de contratos e desenho de indicadores", "territorio": "Rio Claro do Sul", "ini": null, "fim": null, "status": "A confirmar", "entrevistas": null, "grupos": null, "produto": "Proposta de indicadores para o painel de transparência", "resumo": "Organiza dados de contratos em indicadores simples para controle social.", "destaque": "Não"}, {"id": "P19", "frente": "Gestão pública e dados", "titulo": "Avaliação de programa municipal de microcrédito", "parceiro": "Agência Municipal de Fomento (AMF)", "outros": "Banco Meridional", "coordenacao": ["Beatriz Nogueira", "Caio Ferraz"], "equipe": ["Gustavo Lacerda", "Isadora Pimentel", "Patrícia Moura", "Tiago Valente"], "abordagem": "Mista", "metodologia": "Comparação de beneficiários e não beneficiários, survey e entrevistas", "territorio": "Rio Claro do Sul", "ini": 2025, "fim": 2026, "status": "Em andamento", "entrevistas": 30, "grupos": null, "produto": "Relatório de avaliação com recomendações de desenho", "resumo": "Avalia efeitos do microcrédito sobre renda e continuidade dos negócios.", "destaque": "Sim"}], "parceiros": [{"nome": "Agência Municipal de Fomento (AMF)", "tipo": "Público"}, {"nome": "Associação Nacional de Mobilidade Ativa (ANMA)", "tipo": "Terceiro setor"}, {"nome": "Banco Meridional", "tipo": "Privado"}, {"nome": "Centro de Estudos da Sociedade Digital (CESD)", "tipo": "Terceiro setor"}, {"nome": "Cooperativa AgroNorte", "tipo": "Privado"}, {"nome": "Fundação Horizonte Social", "tipo": "Terceiro setor"}, {"nome": "Fundação Vale Verde", "tipo": "Terceiro setor"}, {"nome": "Hospital Universitário Santa Aurora", "tipo": "Terceiro setor"}, {"nome": "Instituto Cidades em Rede", "tipo": "Terceiro setor"}, {"nome": "Instituto Semear", "tipo": "Terceiro setor"}, {"nome": "Prefeitura de Rio Claro do Sul (Controladoria)", "tipo": "Público"}, {"nome": "Prefeitura de Rio Claro do Sul (Defesa Civil)", "tipo": "Público"}, {"nome": "Prefeitura de Rio Claro do Sul (Secretaria de Habitação)", "tipo": "Público"}, {"nome": "Prefeitura de Rio Claro do Sul (Secretaria de Saúde)", "tipo": "Público"}, {"nome": "Secretaria Estadual de Cultura", "tipo": "Público"}, {"nome": "Secretaria Estadual de Educação", "tipo": "Público"}, {"nome": "Rede Latino-Americana de Pesquisa Aplicada", "tipo": "Internacional"}, {"nome": "Seguradora Bem Viver", "tipo": "Privado"}], "equipe": [{"nome": "Helena Marques", "papel": "Coordenação do núcleo", "bio": "Doutora em Sociologia. Coordena o laboratório de métodos do instituto. 18 anos de experiência em pesquisa qualitativa e quantitativa."}, {"nome": "Rodrigo Tavares", "papel": "Coordenação do núcleo", "bio": "Doutor em Ciência Política. Avaliação de políticas públicas e planejamento territorial."}, {"nome": "Beatriz Nogueira", "papel": "Coordenação do núcleo", "bio": "Socióloga, doutora em Educação. Desenho de pesquisa e metodologia qualitativa."}, {"nome": "Caio Ferraz", "papel": "Coordenação do núcleo", "bio": "Geógrafo, doutor em Administração Pública. Indicadores e planejamento territorial."}, {"nome": "Larissa Duarte", "papel": "Pesquisa", "bio": "Doutora em Antropologia Social. Etnografia e pesquisa qualitativa."}, {"nome": "Mateus Albuquerque", "papel": "Pesquisa", "bio": "Mestre em Políticas Públicas. Saúde e uso do tempo."}, {"nome": "Renata Siqueira", "papel": "Pesquisa", "bio": "Doutora em Sociologia. Trabalho, tecnologia e consumo."}, {"nome": "Gustavo Lacerda", "papel": "Pesquisa", "bio": "Mestre em Estatística. Surveys e análise quantitativa."}, {"nome": "Isadora Pimentel", "papel": "Pesquisa", "bio": "Doutoranda em Ciências Sociais. Juventude e cultura."}, {"nome": "Tiago Valente", "papel": "Pesquisa", "bio": "Mestre em Administração. Inovação e gestão pública."}, {"nome": "Camile Brandão", "papel": "Pesquisa", "bio": "Doutoranda em Antropologia. Métodos qualitativos e relações raciais."}, {"nome": "Eduardo Rangel", "papel": "Pesquisa", "bio": "Pós-graduando em Ciência de Dados. Geoprocessamento, Python, R e Power BI."}, {"nome": "Patrícia Moura", "papel": "Pesquisa", "bio": "Mestre em Políticas Públicas. Monitoramento e avaliação."}], "producao": [{"id": "P01", "tipo": "Evento", "titulo": "Apresentação dos resultados sobre acesso a especialistas", "veiculo": "Encontro Nacional de Saúde e Sociedade (Recife)", "data": "2025-04-14"}, {"id": "P02", "tipo": "Mídia", "titulo": "Estudo mostra o que mais pesa na satisfação com o atendimento nas unidades de saúde", "veiculo": "Jornal Diário do Sul", "data": ""}, {"id": "P04", "tipo": "Artigo", "titulo": "Microempreendedores e dívidas: o que os dados mostram", "veiculo": "Revista Cidade Aberta", "data": ""}, {"id": "P04", "tipo": "Evento", "titulo": "Painel sobre crédito e renda de pequenos negócios", "veiculo": "Seminário Economia do Dia a Dia (Porto Alegre)", "data": "2025-11-25"}, {"id": "P07", "tipo": "Artigo", "titulo": "O que funciona na alfabetização das redes municipais", "veiculo": "Revista Cidade Aberta", "data": ""}, {"id": "P07", "tipo": "Evento", "titulo": "Lançamento do relatório de alfabetização", "veiculo": "Congresso de Educação Pública 2025 (Curitiba)", "data": "2025-10-30"}, {"id": "P10", "tipo": "Mídia", "titulo": "Moradores de bairros periféricos percebem o risco de enchente antes dos alertas oficiais", "veiculo": "Rádio Metropolitana", "data": ""}, {"id": "P10", "tipo": "Evento", "titulo": "Participação de Rodrigo Tavares no Fórum Cidades e Clima 2025", "veiculo": "Fórum Cidades e Clima (São Paulo)", "data": "2025-09-24"}, {"id": "P15", "tipo": "Artigo", "titulo": "Condições de moradia em ocupações: o que o cadastro revela", "veiculo": "Portal Política em Foco", "data": ""}, {"id": "P19", "tipo": "Mídia", "titulo": "Programa de microcrédito é avaliado por equipe independente", "veiculo": "Jornal Diário do Sul", "data": ""}, {"id": "", "tipo": "Evento", "titulo": "Larissa Duarte como painelista em 'Métodos qualitativos em políticas públicas'", "veiculo": "Encontro de Pesquisa Aplicada 2025", "data": "2025-10-30"}]};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PAL=['#754E55','#8F98B3','#7F9692','#B8808E','#A998B4','#8C8F7A','#E0A458','#5E7C8B'];
+let DATA=null,sel=new Set(),idx=0,charts=[];
+
+/* ---------- leitura da planilha ---------- */
+const REQ={Projetos:['id_projeto','frente_tematica','projeto','parceiro_principal','abordagem','status'],Equipe:['nome'],Parceiros:['parceiro']};
+function parseWorkbook(wb){
+  const get=(n,opt)=>{const ws=wb.Sheets[n];if(!ws){if(opt)return[];throw new Error('Não encontrei a aba "'+n+'". Use a planilha-modelo como referência.')}
+    const r=XLSX.utils.sheet_to_json(ws,{defval:''});
+    if(REQ[n]&&r.length){const miss=REQ[n].filter(c=>!(c in r[0]));if(miss.length)throw new Error('Na aba "'+n+'" faltam as colunas: '+miss.join(', '))}
+    return r};
+  const L=v=>String(v||'').split(';').map(s=>s.trim()).filter(Boolean);
+  const N=v=>v===''||v==null||isNaN(+v)?null:+v;
+  const pr=get('Projetos');if(!pr.length)throw new Error('A aba "Projetos" está vazia.');
+  const frentes=get('Frentes',1).map(f=>({nome:f.frente_tematica,cor:f.cor_hex||''}));
+  [...new Set(pr.map(p=>p.frente_tematica))].forEach((n,i)=>{if(!frentes.find(f=>f.nome===n))frentes.push({nome:n,cor:''})});
+  frentes.forEach((f,i)=>{if(!/^#[0-9a-f]{6}$/i.test(f.cor))f.cor=PAL[i%PAL.length]});
+  return{
+    frentes,
+    projetos:pr.map(p=>({id:String(p.id_projeto),frente:p.frente_tematica,titulo:p.projeto,parceiro:p.parceiro_principal,outros:p.outros_parceiros||'',
+      coordenacao:L(p.coordenacao),equipe:L(p.equipe),abordagem:p.abordagem,metodologia:p.metodologia||'',territorio:p.territorio||'',
+      ini:N(p.ano_inicio),fim:N(p.ano_fim),status:p.status,entrevistas:N(p.n_entrevistas),grupos:N(p.n_grupos_focais),
+      produto:p.produto_principal||'',resumo:p.resumo||'',destaque:p.destaque||'Não'})),
+    parceiros:get('Parceiros').map(p=>({nome:p.parceiro,tipo:p.tipo_sugerido||'Outros'})),
+    equipe:get('Equipe').map(e=>({nome:e.nome,papel:e.papel_no_nucleo||'',bio:e.minibio||''})),
+    producao:get('Producao_Eventos',1).map(x=>({id:String(x.id_projeto||''),tipo:x.tipo||'',titulo:x.titulo||'',veiculo:x.veiculo_ou_evento||'',data:x.data||''}))
+  };
+}
+function loadData(d,label){
+  DATA=d;sel=new Set(d.projetos.filter(p=>p.destaque==='Sim').map(p=>p.id));idx=0;
+  opts('#fFrente','Todas',d.projetos.map(p=>p.frente));opts('#fAbo','Todas',d.projetos.map(p=>p.abordagem));
+  opts('#fStatus','Todos',d.projetos.map(p=>p.status));opts('#fTipo','Todos',d.parceiros.map(p=>p.tipo));
+  ['fFrente','fAbo','fStatus','fTipo'].forEach(i=>$('#'+i).value='');$('#fBusca').value='';
+  $('#loadedTxt').textContent=label+' · '+d.projetos.length+' projetos, '+d.parceiros.length+' parceiros, '+d.equipe.length+' pessoas';
+  $('#loaded').classList.remove('hide');$('#dropWrap').classList.add('hide');$('#app').classList.remove('hide');
+  lista();render();painel();
+}
+async function readFile(f){
+  const err=$('#err');err.classList.add('hide');
+  try{const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});loadData(parseWorkbook(wb),f.name)}
+  catch(e){err.textContent=e.message||'Não consegui ler este arquivo.';err.classList.remove('hide')}
+}
+$('#pick').onclick=()=>$('#file').click();
+$('#file').onchange=e=>e.target.files[0]&&readFile(e.target.files[0]);
+$('#demo').onclick=()=>loadData(DEMO,'Dados de exemplo (fictícios)');
+$('#trocar').onclick=()=>{$('#loaded').classList.add('hide');$('#dropWrap').classList.remove('hide');$('#app').classList.add('hide');$('#file').value=''};
+const drop=$('#drop');
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',e=>e.dataTransfer.files[0]&&readFile(e.dataTransfer.files[0]));
+
+/* ---------- filtros e lista ---------- */
+function opts(id,label,vals){$(id).innerHTML='<option value="">'+label+'</option>'+[...new Set(vals)].filter(Boolean).sort().map(v=>'<option>'+esc(v)+'</option>').join('')}
+const col=f=>(DATA.frentes.find(x=>x.nome===f)||{}).cor||'#754E55';
+const tipoDe=n=>(DATA.parceiros.find(x=>x.nome===n)||{}).tipo;
+function vis(){
+  const f=$('#fFrente').value,a=$('#fAbo').value,s=$('#fStatus').value,t=$('#fTipo').value,b=$('#fBusca').value.toLowerCase();
+  return DATA.projetos.filter(p=>(!f||p.frente===f)&&(!a||p.abordagem===a)&&(!s||p.status===s)&&(!t||tipoDe(p.parceiro)===t)&&
+    (!b||(p.titulo+p.parceiro+p.coordenacao.join(' ')+p.equipe.join(' ')).toLowerCase().includes(b)));
+}
+function lista(){
+  $('#lista').innerHTML=vis().map(p=>'<label class="proj '+(sel.has(p.id)?'on':'')+'" style="border-left-color:'+col(p.frente)+'"><input type="checkbox" data-id="'+esc(p.id)+'" '+(sel.has(p.id)?'checked':'')+'><span><b>'+esc(p.titulo)+'</b><small>'+esc(p.parceiro)+' · '+esc(p.status)+'</small></span></label>').join('')||'<small>Nenhum projeto com esses filtros.</small>';
+  document.querySelectorAll('#lista input').forEach(i=>i.onchange=()=>{i.checked?sel.add(i.dataset.id):sel.delete(i.dataset.id);lista();render();painel()});
+}
+const chosen=()=>DATA.projetos.filter(p=>sel.has(p.id));
+const chunk=(a,n)=>a.reduce((r,x,i)=>(i%n?r[r.length-1].push(x):r.push([x]),r),[]);
+const count=(arr,fn)=>{const m=new Map();arr.forEach(x=>{const k=fn(x);if(k!==''&&k!=null)m.set(k,(m.get(k)||0)+1)});return[...m].map(([l,v])=>({l,v})).sort((a,b)=>b.v-a.v)};
+const sum=(arr,k)=>arr.reduce((s,p)=>s+(p[k]||0),0);
+const period=p=>(p.ini||'—')+(p.fim&&p.fim!==p.ini?' a '+p.fim:'');
+
+/* ---------- painel ---------- */
+function scope(){return document.querySelector('input[name=scope]:checked').value==='sel'?chosen():DATA.projetos}
+function painel(){
+  if(!DATA)return;const ps=scope();
+  const pessoas=new Set(ps.flatMap(p=>[...p.coordenacao,...p.equipe]));
+  const parc=new Set(ps.flatMap(p=>[p.parceiro]));
+  const k=[[ps.length,'projetos'],[ps.filter(p=>p.status==='Concluído').length,'concluídos'],[ps.filter(p=>p.status==='Em andamento').length,'em andamento'],[parc.size,'parceiros'],[pessoas.size,'pesquisadores(as)'],[sum(ps,'entrevistas'),'entrevistas']];
+  $('#kpis').innerHTML=k.map(x=>'<div class="kpi"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
+  charts.forEach(c=>c.destroy());charts=[];
+  const defs=[
+    ['Projetos por frente temática','bar',count(ps,p=>p.frente),l=>col(l)],
+    ['Projetos por abordagem','doughnut',count(ps,p=>p.abordagem)],
+    ['Projetos por status','doughnut',count(ps,p=>p.status)],
+    ['Projetos por tipo de parceiro','bar',count(ps,p=>tipoDe(p.parceiro)||'Outros')],
+    ['Projetos por ano de início','bar',count(ps,p=>p.ini||'').sort((a,b)=>a.l-b.l)],
+    ['Projetos por coordenação','bar',count(ps.flatMap(p=>p.coordenacao.map(c=>({c}))),x=>x.c).slice(0,8)]
+  ];
+  $('#charts').innerHTML=defs.map((d,i)=>'<div class="ch"><h3>'+d[0]+'</h3><div class="box"><canvas id="cv'+i+'"></canvas></div></div>').join('');
+  defs.forEach((d,i)=>{
+    const labels=d[2].map(x=>String(x.l)),data=d[2].map(x=>x.v),colors=labels.map((l,j)=>d[3]?d[3](l):PAL[j%PAL.length]);
+    const common={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:d[1]==='doughnut',position:'bottom',labels:{boxWidth:10,font:{size:11}}}}};
+    charts.push(new Chart($('#cv'+i),d[1]==='bar'
+      ?{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4}]},options:{...common,indexAxis:'y',scales:{x:{ticks:{precision:0},grid:{display:false}},y:{grid:{display:false},ticks:{font:{size:11}}}}}}
+      :{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},options:{...common,cutout:'58%'}}));
+  });
+}
+document.querySelectorAll('input[name=scope]').forEach(r=>r.onchange=painel);
+
+/* ---------- modelo dos slides ---------- */
+function models(){
+  const c=chosen(),m=[],org=$('#org').value;
+  if($('#tCapa').checked)m.push({t:'cover',org,title:$('#titulo').value,sub:c.length+' projetos em destaque'});
+  if($('#tApres').checked)m.push({t:'about',org,text:$('#about').value});
+  if($('#tNum').checked)m.push({t:'nums',k:[[DATA.projetos.length,'projetos na base'],[DATA.frentes.length,'frentes temáticas'],[DATA.parceiros.length,'parceiros e financiadores'],[DATA.equipe.length,'pesquisadores(as)'],[sum(DATA.projetos,'entrevistas'),'entrevistas em profundidade'],[sum(DATA.projetos,'grupos'),'grupos focais']]});
+  if($('#tPan').checked&&c.length)m.push({t:'pan',fr:count(c,p=>p.frente).slice(0,8).map(x=>({...x,c:col(x.l)})),ab:count(c,p=>p.abordagem)});
+  if($('#tPar').checked&&c.length){const ps=[...new Set(c.flatMap(p=>[p.parceiro,...(p.outros?p.outros.split(/[,;]/).map(s=>s.trim()).filter(Boolean):[])]))];
+    chunk(ps,12).forEach(g=>m.push({t:'par',items:g}))}
+  if($('#tProj').checked)c.forEach(p=>m.push({t:'proj',p,c:col(p.frente)}));
+  if($('#tProd').checked){const ids=new Set(c.map(p=>p.id));chunk(DATA.producao.filter(x=>!x.id||ids.has(x.id)),4).forEach(g=>m.push({t:'prod',items:g}))}
+  if($('#tEq').checked&&c.length){const n=new Set(c.flatMap(p=>[...p.coordenacao,...p.equipe]));chunk(DATA.equipe.filter(e=>n.has(e.nome)),6).forEach(g=>m.push({t:'eq',items:g}))}
+  if($('#tFim').checked)m.push({t:'end',org});
+  return m;
+}
+const kpOf=p=>[['Coordenação',p.coordenacao.join(', ')||'—'],['Período',period(p)],['Abordagem',p.abordagem]];
+function html(s,withId){
+  const id=withId?' id="slide"':'',W=(cls,inner)=>'<div class="slide '+cls+'"'+id+'><div class="in">'+inner+'</div></div>';
+  switch(s.t){
+  case'cover':return W('s-cover','<div class="k">'+esc(s.org)+'</div><h3 class="t1">'+esc(s.title)+'</h3><p class="t1b">'+esc(s.sub)+'</p>');
+  case'about':return W('','<div class="k g">Quem somos</div><h3 class="t2">'+esc(s.org)+'</h3><p class="txt">'+esc(s.text)+'</p>');
+  case'nums':return W('','<div class="k g">Em números</div><h3 class="t2">Panorama geral</h3><div class="grid" style="margin-top:2cqw">'+s.k.map(k=>'<div class="kp"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>').join('')+'</div>');
+  case'pan':{const mx=Math.max(...s.fr.map(x=>x.v));return W('','<div class="k g">Panorama</div><h3 class="t2">Projetos selecionados</h3><div class="two"><div><div class="sub">Por frente temática</div>'+s.fr.map(x=>'<div class="hb"><span>'+esc(x.l.length>34?x.l.slice(0,32)+'…':x.l)+'</span><i style="background:'+x.c+';width:'+(x.v/mx*100)+'%"></i><b>'+x.v+'</b></div>').join('')+'</div><div><div class="sub">Por abordagem</div><div class="pie">'+s.ab.map((x,j)=>'<span><i style="background:'+PAL[j%PAL.length]+'"></i>'+esc(x.l)+': <b>'+x.v+'</b></span>').join('')+'</div></div></div>')}
+  case'par':return W('','<div class="k g">Parceiros e financiadores</div><h3 class="t2">Quem apoia estes projetos</h3><div class="pp">'+s.items.map(x=>'<span>'+esc(x)+'</span>').join('')+'</div>');
+  case'proj':{const p=s.p;return W('','<span class="chip" style="background:'+s.c+'">'+esc(p.frente)+'</span><h3 class="t2">'+esc(p.titulo)+'</h3><div class="sub">'+esc(p.parceiro)+(p.territorio?' · '+esc(p.territorio):'')+'</div><p class="txt">'+esc(p.resumo)+'</p><div class="meta"><b>Metodologia:</b> '+esc(p.metodologia)+'.'+(p.entrevistas?' <b>'+p.entrevistas+'</b> entrevistas.':'')+(p.grupos?' <b>'+p.grupos+'</b> grupos focais.':'')+'<br><b>Entrega:</b> '+esc(p.produto)+'</div><div class="grid" style="margin-top:2cqw">'+kpOf(p).map(k=>'<div class="kp"><span>'+k[0]+'</span><b style="font-size:1.9cqw">'+esc(k[1])+'</b></div>').join('')+'</div>')}
+  case'prod':return W('','<div class="k g">Produção e repercussão</div><h3 class="t2">Artigos, eventos e mídia</h3>'+s.items.map(x=>'<div class="it"><small>'+esc(x.tipo)+'</small>'+esc(x.titulo)+'<br><i>'+esc(x.veiculo)+'</i></div>').join(''));
+  case'eq':return W('','<div class="k g">Equipe</div><h3 class="t2">Quem fez estes projetos</h3><div class="pers">'+s.items.map(e=>'<div><b>'+esc(e.nome)+'</b><small>'+esc(e.papel)+(e.bio?' · '+esc(e.bio):'')+'</small></div>').join('')+'</div>');
+  case'end':return W('s-cover" style="background:var(--c2)','<div class="k">'+esc(s.org)+'</div><h3 class="t1">Vamos conversar?</h3>');
+  }
+}
+function applyColors(){document.documentElement.style.setProperty('--c1',$('#c1').value);document.documentElement.style.setProperty('--c2',$('#c2').value)}
+function render(){
+  if(!DATA)return;applyColors();const m=models();
+  if(!m.length){$('#slide').outerHTML='<div class="slide" id="slide"><div class="in"><h3 class="t2">Nada selecionado</h3><p class="txt">Marque projetos e seções ao lado.</p></div></div>';$('#pos').textContent='0 / 0';return}
+  idx=Math.min(idx,m.length-1);$('#slide').outerHTML=html(m[idx],true);$('#pos').textContent='Slide '+(idx+1)+' / '+m.length;
+}
+$('#ant').onclick=()=>{idx=Math.max(0,idx-1);render()};
+$('#prox').onclick=()=>{idx=Math.min(models().length-1,idx+1);render()};
+$('#bDest').onclick=()=>{sel=new Set(DATA.projetos.filter(p=>p.destaque==='Sim').map(p=>p.id));lista();render();painel()};
+$('#bTodos').onclick=()=>{vis().forEach(p=>sel.add(p.id));lista();render();painel()};
+$('#bLimpa').onclick=()=>{sel.clear();lista();render();painel()};
+['fFrente','fAbo','fStatus','fTipo','fBusca'].forEach(i=>$('#'+i).addEventListener('input',lista));
+['tCapa','tApres','tNum','tPan','tPar','tProj','tProd','tEq','tFim','org','titulo','about','c1','c2'].forEach(i=>$('#'+i).addEventListener('input',()=>{idx=0;render()}));
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));$('#painel').classList.toggle('hide',t.dataset.t!=='painel');$('#apres').classList.toggle('hide',t.dataset.t!=='apres');if(t.dataset.t==='painel')painel()});
+
+/* ---------- PDF (impressão do navegador) ---------- */
+function printHtml(){applyColors();return models().map(s=>html(s,false)).join('')}
+$('#gPdf').onclick=()=>{const m=models();if(!m.length)return;$('#printArea').innerHTML=printHtml();$('#msg').textContent='Na janela de impressão, escolha “Salvar como PDF”.';setTimeout(()=>window.print(),50)};
+
+/* ---------- PowerPoint ---------- */
+const hx=c=>String(c).replace('#','');
+function pptxBuild(){
+  const m=models(),px=new PptxGenJS();px.layout='LAYOUT_WIDE';
+  const C1=hx($('#c1').value),C2=hx($('#c2').value),CREAM='F9F5E8',SAGE='7B9170',F='Arial';
+  m.forEach(s=>{
+    const sl=px.addSlide();
+    const head=(k,t)=>{sl.background={color:CREAM};sl.addText(k.toUpperCase(),{x:.7,y:.45,w:11.9,h:.35,fontFace:F,fontSize:12,bold:true,color:SAGE,charSpacing:2});sl.addText(t,{x:.7,y:.8,w:11.9,h:.9,fontFace:F,fontSize:26,bold:true,color:C2,valign:'top',fit:'shrink'})};
+    const box=(x,y,w,h,label,val,vs)=>{sl.addShape(px.ShapeType.roundRect,{x,y,w,h,fill:{color:'FFFFFF'},line:{color:'E8E2D0',width:1},rectRadius:.08});
+      sl.addText([{text:String(val),options:{fontSize:vs||24,bold:true,color:C1,breakLine:true}},{text:label,options:{fontSize:11,color:'6B7186'}}],{x:x+.15,y:y+.05,w:w-.3,h:h-.1,fontFace:F,valign:'middle',fit:'shrink'})};
+    switch(s.t){
+    case'cover':sl.background={color:C1};sl.addText(s.org.toUpperCase(),{x:.9,y:2.2,w:11.5,h:.4,fontFace:F,fontSize:14,bold:true,color:'FFFFFF',charSpacing:3});
+      sl.addText(s.title,{x:.9,y:2.7,w:11.5,h:1.8,fontFace:F,fontSize:42,bold:true,color:'FFFFFF',valign:'top',fit:'shrink'});sl.addText(s.sub,{x:.9,y:4.6,w:11.5,h:.6,fontFace:F,fontSize:20,color:'FFFFFF'});break;
+    case'about':head('Quem somos',s.org);sl.addText(s.text,{x:.7,y:2,w:11.5,h:3.5,fontFace:F,fontSize:20,color:'2B3142',valign:'top',paraSpaceAfter:8,fit:'shrink'});break;
+    case'nums':head('Em números','Panorama geral');s.k.forEach((k,i)=>box(.7+(i%3)*4,2.1+Math.floor(i/3)*2.2,3.8,1.9,k[1],k[0],34));break;
+    case'pan':head('Panorama','Projetos selecionados');
+      sl.addText('Por frente temática',{x:.7,y:1.8,w:7,h:.3,fontFace:F,fontSize:12,color:'6B7186'});
+      sl.addChart(px.charts.BAR,[{name:'Projetos',labels:s.fr.map(x=>x.l.length>38?x.l.slice(0,36)+'…':x.l),values:s.fr.map(x=>x.v)}],{x:.6,y:2.1,w:7.2,h:4.9,barDir:'bar',chartColors:s.fr.map(x=>hx(x.c)),catAxisOrientation:'maxMin',showValue:true,dataLabelFontSize:11,catAxisLabelFontSize:11,valAxisHidden:true,valGridLine:{style:'none'},showLegend:false,barGapWidthPct:40});
+      sl.addText('Por abordagem',{x:8.3,y:1.8,w:4.4,h:.3,fontFace:F,fontSize:12,color:'6B7186'});
+      sl.addChart(px.charts.DOUGHNUT,[{name:'Abordagem',labels:s.ab.map(x=>x.l),values:s.ab.map(x=>x.v)}],{x:8.2,y:2.1,w:4.6,h:4.9,holeSize:55,chartColors:s.ab.map((x,j)=>hx(PAL[j%PAL.length])),showLegend:true,legendPos:'b',legendFontSize:11,showPercent:false,showValue:true,dataLabelColor:'FFFFFF',dataLabelFontSize:11});break;
+    case'par':head('Parceiros e financiadores','Quem apoia estes projetos');
+      [s.items.slice(0,6),s.items.slice(6)].forEach((g,i)=>g.length&&sl.addText(g.map(t=>({text:t,options:{bullet:{code:'25AA'},breakLine:true}})),{x:.7+i*6.2,y:2,w:5.9,h:4.6,fontFace:F,fontSize:15,color:'2B3142',valign:'top',paraSpaceAfter:10,fit:'shrink'}));break;
+    case'proj':{const p=s.p;sl.background={color:CREAM};
+      sl.addText(p.frente,{x:.7,y:.45,w:Math.min(11.9,.45+p.frente.length*.11),h:.36,fontFace:F,fontSize:11,bold:true,color:'FFFFFF',fill:{color:hx(s.c)},align:'center',shape:px.ShapeType.roundRect,rectRadius:.18});
+      sl.addText(p.titulo,{x:.7,y:.95,w:11.9,h:1.1,fontFace:F,fontSize:24,bold:true,color:C2,valign:'top',fit:'shrink'});
+      sl.addText(p.parceiro+(p.territorio?'  ·  '+p.territorio:''),{x:.7,y:2.05,w:11.9,h:.35,fontFace:F,fontSize:13,color:'5C6378'});
+      sl.addText(p.resumo,{x:.7,y:2.5,w:11.9,h:1.2,fontFace:F,fontSize:16,color:'2B3142',valign:'top',fit:'shrink'});
+      sl.addText([{text:'Metodologia: ',options:{bold:true,color:C2}},{text:p.metodologia+'.'+(p.entrevistas?' '+p.entrevistas+' entrevistas.':'')+(p.grupos?' '+p.grupos+' grupos focais.':''),options:{breakLine:true}},{text:'Entrega: ',options:{bold:true,color:C2}},{text:p.produto}],{x:.7,y:3.75,w:11.9,h:1.5,fontFace:F,fontSize:12.5,color:'4A5064',valign:'top',paraSpaceAfter:6,fit:'shrink'});
+      kpOf(p).forEach((k,i)=>box(.7+i*4,5.55,3.8,1.3,k[0],k[1],15));break}
+    case'prod':head('Produção e repercussão','Artigos, eventos e mídia');
+      sl.addText(s.items.flatMap(x=>[{text:x.tipo.toUpperCase(),options:{fontSize:10,bold:true,color:SAGE,breakLine:true}},{text:x.titulo,options:{fontSize:14,color:'2B3142',breakLine:true}},{text:x.veiculo,options:{fontSize:11,color:'6B7186',breakLine:true,paraSpaceAfter:10}}]),{x:.7,y:1.9,w:11.9,h:5,fontFace:F,valign:'top',fit:'shrink'});break;
+    case'eq':head('Equipe','Quem fez estes projetos');s.items.forEach((e,i)=>{const x=.7+(i%2)*6.1,y=1.9+Math.floor(i/2)*1.7;
+      sl.addShape(px.ShapeType.roundRect,{x,y,w:5.9,h:1.5,fill:{color:'FFFFFF'},line:{color:'E8E2D0',width:1},rectRadius:.08});
+      sl.addText([{text:e.nome,options:{fontSize:15,bold:true,color:C1,breakLine:true}},{text:e.papel+(e.bio?' · '+e.bio:''),options:{fontSize:10.5,color:'6B7186'}}],{x:x+.2,y:y+.05,w:5.5,h:1.4,fontFace:F,valign:'middle',fit:'shrink'})});break;
+    case'end':sl.background={color:C2};sl.addText(s.org.toUpperCase(),{x:.9,y:2.6,w:11.5,h:.4,fontFace:F,fontSize:14,bold:true,color:'FFFFFF',charSpacing:3});sl.addText('Vamos conversar?',{x:.9,y:3.1,w:11.5,h:1.2,fontFace:F,fontSize:42,bold:true,color:'FFFFFF'});break;
+    }
+  });
+  return px;
+}
+$('#gPptx').onclick=async()=>{
+  if(!models().length)return;const b=$('#gPptx');b.disabled=true;$('#msg').textContent='Gerando…';
+  try{const px=pptxBuild(),nome='apresentacao-'+new Date().toISOString().slice(0,10)+'.pptx';await px.writeFile({fileName:nome});$('#msg').textContent='Pronto: '+nome}
+  catch(e){$('#msg').textContent='Erro ao gerar: '+e.message}
+  b.disabled=false;
+};
+</script>
+</body>
+</html>
